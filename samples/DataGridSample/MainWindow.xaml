@@ -21,7 +21,7 @@
         Value="{Binding Path=GDP, Mode=OneWay, Converter={StaticResource GDPConverter}}"/>
     </Style>
   </Window.Styles>
-  
+
   <TabControl>
     <TabItem Header="DataGrid">
       <dg:DataGrid
@@ -31,11 +31,16 @@
         CanUserReorderColumns="True">
 
         <dg:DataGrid.Columns>
-      
-          <dg:DataGridTextColumn
+
+          <dg:DataGridTemplateColumn
             Header="Country"
-            Binding="{Binding Name}"
-            Width="6*" />
+            Width="6*">
+            <dg:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}" />
+              </DataTemplate>
+            </dg:DataGridTemplateColumn.CellTemplate>
+          </dg:DataGridTemplateColumn>
           <dg:DataGridTextColumn
             Header="Region"
             Binding="{Binding Region}"
@@ -53,7 +58,7 @@
             Binding="{Binding GDP}"
             Width="3*"
             CellStyleClasses="gdp"/>
-      
+
         </dg:DataGrid.Columns>
 
       </dg:DataGrid>
@@ -119,7 +124,7 @@
           HorizontalAlignment="Right"/>
       </Grid>
     </TabItem>
-    
+
   </TabControl>
 
 </Window>
