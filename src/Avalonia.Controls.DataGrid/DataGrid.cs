@@ -158,9 +158,20 @@ namespace Avalonia.Controls
         // set as the rows were scrolled off.
         private double _verticalOffset;
         private byte _verticalScrollChangesIgnored;
-
+        
+        public double VerticalScrollOffset => _verticalOffset;
+        
+        public double HorizontalScrollOffset => _horizontalOffset;        
+        
         public event EventHandler<ScrollEventArgs> HorizontalScroll;
         public event EventHandler<ScrollEventArgs> VerticalScroll;
+
+        /// <summary>
+        /// Cumulated height of all known rows, including the gridlines and details section.
+        /// This property returns an approximation of the actual total row heights and also
+        /// updates the RowHeightEstimate
+        /// </summary>
+        public double RowsTotalHeight => EdgedRowsHeightCalculated;
 
         /// <summary>
         /// Identifies the CanUserReorderColumns dependency property.
@@ -2370,6 +2381,9 @@ namespace Avalonia.Controls
                 {
                     DisplayData.PendingVerticalScrollHeight = scrollHeight;
                     handled = true;
+                    
+                    var eventType = scrollHeight > 0 ? ScrollEventType.SmallIncrement : ScrollEventType.SmallDecrement;
+                    VerticalScroll?.Invoke(this, new ScrollEventArgs(eventType, delta.Y));
                 }
 
                 // Horizontal scroll handling
@@ -2392,6 +2406,9 @@ namespace Avalonia.Controls
                         // We don't need to invalidate once again after UpdateHorizontalOffset.
                         ignoreInvalidate = true;
                         handled = true;
+                        
+                        var eventType = delta.X > 0 ? ScrollEventType.SmallDecrement : ScrollEventType.SmallIncrement;
+                        HorizontalScroll?.Invoke(this, new ScrollEventArgs(eventType, delta.X));
                     }
                 }
 
