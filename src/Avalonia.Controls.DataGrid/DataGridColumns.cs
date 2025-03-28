@@ -503,7 +503,7 @@ namespace Avalonia.Controls
         internal void OnFillerColumnWidthNeeded(double finalWidth)
         {
             DataGridFillerColumn fillerColumn = ColumnsInternal.FillerColumn;
-            double totalColumnsWidth = ColumnsInternal.VisibleEdgedColumnsWidth;
+            double totalColumnsWidth = ColumnsInternal.VisibleEdgedColumnsWidth + ActualRowHeaderWidth;
             if (finalWidth - totalColumnsWidth > LayoutHelper.LayoutEpsilon)
             {
                 fillerColumn.FillerWidth = finalWidth - totalColumnsWidth;
