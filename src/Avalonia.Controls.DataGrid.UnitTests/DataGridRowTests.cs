@@ -2,11 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Avalonia.Controls.Shapes;
 using Avalonia.Data;
 using Avalonia.Headless.XUnit;
 using Avalonia.Markup.Xaml.Styling;
+using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
 using Xunit;
@@ -87,6 +90,18 @@ public class DataGridRowTests
         Assert.False(items[2].IsSelected);
     }
 
+    [AvaloniaFact]
+    public void DataGridRow_Bounds_Match_DataGrid_When_Header_Present()
+    {
+        var items = Enumerable.Range(0, 100).Select(x => new Model($"Item {x}")).ToList();
+        DataGrid target = CreateTarget(items, [WithHeader()]);
+       
+       // target.HeadersVisibility = DataGridHeadersVisibility.All;
+        var rows = GetRows(target);
+
+        Assert.All(rows, x => Assert.Equal(target.Bounds.Width, x.Bounds.Width));
+    }
+
     private static DataGrid CreateTarget(
         IList items,
         IEnumerable<Style>? styles = null)
@@ -110,7 +125,8 @@ public class DataGridRowTests
             {
                 new DataGridTextColumn { Header = "Name", Binding = new Binding("Name") }
             },
-            ItemsSource = items
+            ItemsSource = items,
+            HeadersVisibility = DataGridHeadersVisibility.All,
         };
 
         if (styles is not null)
@@ -118,7 +134,7 @@ public class DataGridRowTests
             foreach (var style in styles)
                 target.Styles.Add(style);
         }
-
+       
         root.Content = target;
         root.Show();
         return target;
@@ -144,6 +160,14 @@ public class DataGridRowTests
         return new Style(x => x.OfType<DataGridRow>())
         {
             Setters = { new Setter(DataGridRow.IsSelectedProperty, new Binding("IsSelected", BindingMode.TwoWay)) }
+        };
+    }
+
+    private static Style WithHeader()
+    {
+        return new Style(x => x.OfType<DataGridRow>())
+        {
+            Setters = { new Setter(DataGridRow.HeaderProperty, new Binding("Name", BindingMode.OneWay))} 
         };
     }
 
