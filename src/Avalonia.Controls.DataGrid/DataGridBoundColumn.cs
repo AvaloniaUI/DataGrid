@@ -23,7 +23,7 @@ namespace Avalonia.Controls
 #endif
     abstract class DataGridBoundColumn : DataGridColumn
     {
-        private IBinding _binding; 
+        private BindingBase _binding; 
 
         /// <summary>
         /// Gets or sets the binding that associates the column with a property in the data source.
@@ -31,7 +31,7 @@ namespace Avalonia.Controls
         //TODO Binding
         [AssignBinding]
         [InheritDataTypeFromItems(nameof(DataGrid.ItemsSource), AncestorType = typeof(DataGrid))]
-        public virtual IBinding Binding
+        public virtual BindingBase Binding
         {
             get
             {
@@ -51,7 +51,7 @@ namespace Avalonia.Controls
 
                     if (_binding != null)
                     {
-                        if(_binding is BindingBase binding)
+                        if(_binding is StandardBindingBase binding)
                         {
                             if (binding.Mode == BindingMode.OneWayToSource)
                             {
@@ -86,7 +86,7 @@ namespace Avalonia.Controls
         /// The binding that will be used to get or set cell content for the clipboard.
         /// If the base ClipboardContentBinding is not explicitly set, this will return the value of Binding.
         /// </summary>
-        public override IBinding ClipboardContentBinding
+        public override BindingBase ClipboardContentBinding
         {
             get
             {
@@ -113,7 +113,7 @@ namespace Avalonia.Controls
             return element;
         } 
 
-        private static ICellEditBinding BindEditingElement(AvaloniaObject target, AvaloniaProperty property, IBinding binding)
+        private static ICellEditBinding BindEditingElement(AvaloniaObject target, AvaloniaProperty property, BindingBase binding)
         {
             var result = binding.Initiate(target, property, enableDataValidation: true); 
 
