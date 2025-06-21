@@ -115,21 +115,28 @@ namespace Avalonia.Controls
 
         private static ICellEditBinding BindEditingElement(AvaloniaObject target, AvaloniaProperty property, BindingBase binding)
         {
-            var result = binding.Initiate(target, property, enableDataValidation: true); 
+            // TODO: Skipping the validation stuff for now as this needs to be re-implemented when
+            // we properly support querying the validation state on bindings - then the
+            // CellEditBinding stuff can be removed as that was only needed to work around the
+            // lack of that feature in Avalonia.
+            target.Bind(property, binding);
 
-            if (result != null)
-            {
-                if(result.Source is IAvaloniaSubject<object> subject)
-                {
-                    var bindingHelper = new CellEditBinding(subject);
-                    var instanceBinding = new InstancedBinding(bindingHelper.InternalSubject, result.Mode, result.Priority); 
+            ////var result = binding.Instance(target, property, null); 
 
-                    BindingOperations.Apply(target, property, instanceBinding, null);
-                    return bindingHelper;
-                } 
+            ////if (result != null)
+            ////{
+            ////    if(result.Source is IAvaloniaSubject<object> subject)
+            ////    {
+            ////        var bindingHelper = new CellEditBinding(subject);
+            ////        var instanceBinding = new InstancedBinding(bindingHelper.InternalSubject, result.Mode, result.Priority); 
 
-                BindingOperations.Apply(target, property, result, null);
-            } 
+            ////        BindingOperations.Apply(target, property, instanceBinding, null);
+            ////        return bindingHelper;
+            ////    }
+
+            ////    target.Bind(property, res+ult);
+            ////    BindingOperations.Apply(target, property, result, null);
+            ////} 
 
             return null;
         } 
