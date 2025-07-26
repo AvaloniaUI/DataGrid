@@ -1699,7 +1699,7 @@ namespace Avalonia.Controls
                 {
                     // Scrolling Down
                     int lastVisibleSlot = GetPreviousVisibleSlot(SlotCount);
-                    if (_vScrollBar != null && MathUtilities.AreClose(_vScrollBar.Maximum, newVerticalOffset))
+                    if (_vScrollBar != null && MathUtilities.LessThanOrClose(_vScrollBar.Maximum, newVerticalOffset))
                     {
                         // We've scrolled to the bottom of the ScrollBar, automatically place the user at the very bottom
                         // of the DataGrid.  If this produces very odd behavior, evaluate the coping strategy used by
